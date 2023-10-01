@@ -23,7 +23,7 @@ export class RegisterUserUseCase {
     constructor(private usersRepository: UsersRepository) { }
 
     /* =========================== aux functions ============================= */
-    private validateFields(newUserData: RegisterUserUseCaseRequest) {
+    private validateFields(fields: RegisterUserUseCaseRequest) {
         const fieldsSchema = z.object({
             user_name: z.string().max(50),
             email: z.string().email(),
@@ -34,7 +34,7 @@ export class RegisterUserUseCase {
             user_uf: z.string().length(2).toUpperCase().optional()
         })
 
-        fieldsSchema.parse(newUserData);
+        fieldsSchema.parse(fields);
     }
 
     private async checkIfEmailIsAvailable(email: string) {

@@ -9,6 +9,7 @@ interface FetchRidesUseCaseRequest {
 export class FetchRidesUseCase {
     constructor(private ridesRepository: RidesRepository) { }
 
+    /* =========================== aux functions =================== */
     private validateFields(fields: FetchRidesUseCaseRequest) {
         const fieldsSchema = z.object({
             page: z.coerce.number().min(1).optional().default(1)
@@ -18,6 +19,7 @@ export class FetchRidesUseCase {
         return validatedFields
     }
 
+    /* =========================== main routine =================== */
     async execute(data: FetchRidesUseCaseRequest) {
         const { page } = this.validateFields(data);
 

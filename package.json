@@ -1,0 +1,28 @@
+{
+  "name": "teste-riderize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch server.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "prisma": "^5.3.1",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.3.1",
+    "apollo-server": "^3.12.1",
+    "bcrypt": "^5.1.1",
+    "gql": "^1.1.2",
+    "tsx": "^3.13.0",
+    "zod": "^3.22.2"
+  }
+}

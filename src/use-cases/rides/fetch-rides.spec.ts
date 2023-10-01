@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
 import { FetchRidesUseCase } from "./fetch-rides";
+import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
 
 
 let inMemoryRidesRepository: InMemoryRidesRepository
@@ -25,7 +25,8 @@ describe('Fetch Rides Use Case', () => {
             end_date_registration: new Date(tomorrow),
             start_place: 'Start Ride Avenue',
             ride_city: 'Ride City',
-            ride_uf: 'RS'
+            ride_uf: 'RS',
+            creator_id: 'user-01'
         };
 
         inMemoryRidesRepository.create(newRideBaseData);
@@ -48,7 +49,9 @@ describe('Fetch Rides Use Case', () => {
                 end_date_registration: new Date(tomorrow),
                 start_place: 'Start Ride Avenue',
                 ride_city: 'Ride City',
-                ride_uf: 'RS'
+                ride_uf: 'RS',
+                creator_id: 'user-01'
+
             };
 
             inMemoryRidesRepository.create(newRideBaseData);
@@ -72,7 +75,8 @@ describe('Fetch Rides Use Case', () => {
                 end_date_registration: new Date(tomorrow),
                 start_place: 'Start Ride Avenue',
                 ride_city: 'Ride City',
-                ride_uf: 'RS'
+                ride_uf: 'RS',
+                creator_id: 'user-01'
             };
 
             inMemoryRidesRepository.create(newRideBaseData);

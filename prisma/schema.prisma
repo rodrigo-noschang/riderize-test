@@ -22,7 +22,10 @@ model Ride {
   additional_information String?
   start_place            String
   participants_limit     Int?
-  Registration           Registration[]
+  registration           Registration[]
+
+  created_by User   @relation(fields: [creator_id], references: [user_id], onDelete: Cascade)
+  creator_id String
 
   @@map("rides")
 }
@@ -37,7 +40,9 @@ model User {
   user_city String?
   user_uf   String?
 
-  Registration Registration[]
+  registration Registration[]
+
+  Ride Ride[]
 
   @@map("users")
 }
@@ -46,10 +51,10 @@ model Registration {
   registration_id   String   @id @default(uuid())
   subscription_date DateTime @default(now())
 
-  ride    Ride   @relation(fields: [ride_id], references: [ride_id])
+  ride    Ride   @relation(fields: [ride_id], references: [ride_id], onDelete: Cascade)
   ride_id String
 
-  user    User   @relation(fields: [user_id], references: [user_id])
+  user    User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   user_id String
 
   @@map("registrations")

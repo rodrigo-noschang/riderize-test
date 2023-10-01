@@ -4,10 +4,12 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 ## Requisitos Funcionais
 - [x] Criação de Usuário
 - [x] Login de Usuário
-- [ ] Visualização de Usuários inscritos em um Pedal
 
 - [x] Criação de Pedais
 - [x] Listar os Pedais com paginação de 15 em 15
+
+- [x] Permitir que os usuários se inscrevam nos pedais
+- [ ] Visualização de Usuários inscritos em um Pedal
 - [ ] Listar os usuários registrados no pedal
 - [ ] Listar os pedais que o usuário participou
 - [ ] Listar os pedais criados pelo usuário
@@ -15,6 +17,7 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 ## Requisitos Não Funcionais
 - [ ] Todas as consultas devem exigir o usuário autenticado com um JWT
 - [x] Não permitir cadastro no pedal depois da data de encerramento de inscrição (**end_date_registration**)
+- [x] Não permitir cadastro no pedal antes da data de abertura de inscrição (**start_date_registration**)
 - [x] Início de registro da inscrição deve ser menor (anterior) à sua data de fim
 - [x] Usuário deve ter a senha encriptografada salva no banco
 

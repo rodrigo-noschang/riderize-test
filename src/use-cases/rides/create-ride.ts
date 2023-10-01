@@ -1,8 +1,8 @@
 import z from "zod";
 import dayjs from "dayjs";
 
-import { RidesRepository } from "../../repositories/rides-repository";
 import { InvalidDatesError } from "../../errors/invalid-dates";
+import { RidesRepository } from "../../repositories/rides-repository";
 
 interface CreateRideUseCaseRequest {
     ride_name: string,
@@ -11,7 +11,8 @@ interface CreateRideUseCaseRequest {
     end_date_registration: Date
     start_place: string
     ride_city: string,
-    ride_uf: string
+    ride_uf: string,
+    creator_id: string
 
     additional_information?: string
     participants_limit?: number
@@ -30,6 +31,7 @@ export class CreateRideUseCase {
             start_place: z.string().max(50),
             ride_city: z.string().max(30),
             ride_uf: z.string().length(2).toUpperCase(),
+            creator_id: z.string(),
 
             additional_information: z.string().max(240).nullable().optional().default(null),
             participants_limit: z.coerce.number().min(1).max(250).nullable().optional().default(null),

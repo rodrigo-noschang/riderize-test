@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import dayjs from "dayjs";
 
 import { CreateRideUseCase } from "./create-ride";
 import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
+
 import { InvalidDatesError } from "../../errors/invalid-dates";
-import dayjs from "dayjs";
 
 let inMemoryRidesRepository: InMemoryRidesRepository
 let sut: CreateRideUseCase
@@ -27,7 +28,8 @@ describe('Create Ride Use Case', () => {
             end_date_registration: new Date(end_registration),
             start_place: 'Start Ride Avenue',
             ride_city: 'Ride City',
-            ride_uf: 'RS'
+            ride_uf: 'RS',
+            creator_id: 'user-01'
         };
 
         const { ride } = await sut.execute(newRideBaseData);
@@ -48,7 +50,8 @@ describe('Create Ride Use Case', () => {
             end_date_registration: new Date(end_registration),
             start_place: 'Start Ride Avenue',
             ride_city: 'Ride City',
-            ride_uf: 'RS'
+            ride_uf: 'RS',
+            creator_id: 'user-01'
         };
 
         await expect(() => {
@@ -71,7 +74,8 @@ describe('Create Ride Use Case', () => {
             end_date_registration: new Date(end_registration),
             start_place: 'Start Ride Avenue',
             ride_city: 'Ride City',
-            ride_uf: 'RS'
+            ride_uf: 'RS',
+            creator_id: 'user-01'
         };
 
         await expect(() => {

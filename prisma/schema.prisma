@@ -16,12 +16,12 @@ model Ride {
   start_date              DateTime
   start_date_registration DateTime
   end_date_registration   DateTime
+  ride_city               String
+  ride_uf                 String
 
   additional_information String?
   start_place            String
   participants_limit     Int?
-  ride_city              String?
-  ride_uf                String?
   Registration           Registration[]
 
   @@map("rides")

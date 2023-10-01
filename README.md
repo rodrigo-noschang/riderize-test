@@ -1,14 +1,13 @@
 # Teste técnico Riderize:
 O objetivo desse desafio é criar uma API que irá possibilitar a criação de pedais pelos usuários, além disso outros usuários poderão visualizar esses pedais e se inscrever neles para que no dia marcado aqueles que se inscreveram possam pedalar em grupo.
 
-
 ## Requisitos Funcionais
 - [x] Criação de Usuário
-- [ ] Visualização de Usuários
 - [x] Login de Usuário
+- [ ] Visualização de Usuários inscritos em um Pedal
 
-- [ ] Criação de Pedais
-- [ ] Listar os Pedais
+- [x] Criação de Pedais
+- [ ] Listar os Pedais com paginação de 20 em 20
 - [ ] Listar os usuários registrados no pedal
 - [ ] Listar os pedais que o usuário participou
 - [ ] Listar os pedais criados pelo usuário
@@ -21,3 +20,6 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 ## Regras de Negócio
 - [x] Emails dos usuários devem ser únicos
 - [x] Telefone dos usuários devem ser opcionais, porém únicos
+
+## Backlog
+- [ ] Test for fields validation (?)

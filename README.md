@@ -9,8 +9,8 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 - [x] Listar os Pedais com paginação de 15 em 15
 
 - [x] Permitir que os usuários se inscrevam nos pedais
-- [ ] Visualização de Usuários inscritos em um Pedal
-- [ ] Listar os usuários registrados no pedal
+- [x] Visualização de Usuários inscritos em um Pedal
+- [x] Listar os usuários registrados no pedal
 - [ ] Listar os pedais que o usuário participou
 - [ ] Listar os pedais criados pelo usuário
 

@@ -17,4 +17,12 @@ export class InMemoryRegistrationRepository implements RegistrationRepository {
 
         return newRegistration;
     }
+
+    async fetchRideRegisteredUsers(rideId: string) {
+        const rideRegistrations = this.registrations.filter(registration => {
+            return registration.ride_id === rideId;
+        })
+
+        return rideRegistrations;
+    }
 }

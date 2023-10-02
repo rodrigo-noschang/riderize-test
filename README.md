@@ -11,7 +11,7 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 - [x] Permitir que os usuários se inscrevam nos pedais
 - [x] Visualização de Usuários inscritos em um Pedal
 - [x] Listar os usuários registrados no pedal
-- [ ] Listar os pedais que o usuário participou
+- [x] Listar os pedais que o usuário participou
 - [ ] Listar os pedais criados pelo usuário
 
 ## Requisitos Não Funcionais

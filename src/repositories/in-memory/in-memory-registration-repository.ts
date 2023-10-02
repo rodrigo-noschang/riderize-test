@@ -3,6 +3,8 @@ import { Prisma, Registration } from "@prisma/client";
 
 import { RegistrationRepository } from "../registrations-repository";
 
+const DATA_PER_PAGE = 15;
+
 export class InMemoryRegistrationRepository implements RegistrationRepository {
     public registrations: Registration[] = [];
 
@@ -18,11 +20,29 @@ export class InMemoryRegistrationRepository implements RegistrationRepository {
         return newRegistration;
     }
 
-    async fetchRideRegisteredUsers(rideId: string) {
+    async fetchRideRegisteredUsers(rideId: string, page: number) {
+        const take = page * DATA_PER_PAGE;
+        const skip = (page - 1) * DATA_PER_PAGE;
+
         const rideRegistrations = this.registrations.filter(registration => {
             return registration.ride_id === rideId;
         })
 
-        return rideRegistrations;
+        const paginatedRides = rideRegistrations.slice(skip, take);
+
+        return paginatedRides;
+    }
+
+    async fetchRidesUserRegisteredTo(userId: string, page: number) {
+        const take = page * DATA_PER_PAGE;
+        const skip = (page - 1) * DATA_PER_PAGE;
+
+        const ridesUserRegisteredTo = this.registrations.filter(registration => {
+            return registration.user_id === userId
+        });
+
+        const paginatedUsers = ridesUserRegisteredTo.slice(skip, take);
+
+        return paginatedUsers;
     }
 }

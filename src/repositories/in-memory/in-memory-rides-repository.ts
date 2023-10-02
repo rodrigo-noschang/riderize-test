@@ -41,4 +41,12 @@ export class InMemoryRidesRepository implements RidesRepository {
 
         return ride ?? null;
     }
+
+    async fetchRidesByCreator(userId: string) {
+        const rides = this.rides.filter(ride => {
+            return ride.creator_id === userId
+        });
+
+        return rides;
+    }
 }

@@ -42,10 +42,15 @@ export class InMemoryRidesRepository implements RidesRepository {
         return ride ?? null;
     }
 
-    async fetchRidesByCreator(userId: string) {
-        const rides = this.rides.filter(ride => {
+    async fetchRidesByCreator(userId: string, page: number) {
+        const skip = (page - 1) * RIDES_PER_PAGE;
+        const take = page * RIDES_PER_PAGE;
+
+        const ridesByCreator = this.rides.filter(ride => {
             return ride.creator_id === userId
         });
+
+        const rides = ridesByCreator.slice(skip, take);
 
         return rides;
     }

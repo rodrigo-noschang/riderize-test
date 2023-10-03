@@ -2,15 +2,15 @@ import z from 'zod';
 
 import { RidesRepository } from "../../repositories/rides-repository";
 
-interface FetchRidesUseCaseRequest {
+interface FetchRidesServiceRequest {
     page?: number
 }
 
-export class FetchRidesUseCase {
+export class FetchRidesService {
     constructor(private ridesRepository: RidesRepository) { }
 
     /* =========================== aux functions =================== */
-    private validateFields(fields: FetchRidesUseCaseRequest) {
+    private validateFields(fields: FetchRidesServiceRequest) {
         const fieldsSchema = z.object({
             page: z.coerce.number().min(1).optional().default(1)
         });
@@ -20,7 +20,7 @@ export class FetchRidesUseCase {
     }
 
     /* =========================== main routine =================== */
-    async execute(data: FetchRidesUseCaseRequest) {
+    async execute(data: FetchRidesServiceRequest) {
         const { page } = this.validateFields(data);
 
         const rides = await this.ridesRepository.fetchRides(page)

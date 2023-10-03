@@ -1,14 +1,15 @@
 import { beforeEach, describe, expect, it } from "vitest";
+
 import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
-import { FetchRidesCreatedByUserUseCase } from "./fetch-rides-created-by-user";
+import { FetchRidesCreatedByUserService } from "./fetch-rides-created-by-user";
 
 let inMemoryRidesRepository: InMemoryRidesRepository;
-let sut: FetchRidesCreatedByUserUseCase;
+let sut: FetchRidesCreatedByUserService;
 
 describe('Fetch Rides Created By User', () => {
     beforeEach(() => {
         inMemoryRidesRepository = new InMemoryRidesRepository();
-        sut = new FetchRidesCreatedByUserUseCase(inMemoryRidesRepository);
+        sut = new FetchRidesCreatedByUserService(inMemoryRidesRepository);
     })
 
     it('should fetch rides created by user', async () => {

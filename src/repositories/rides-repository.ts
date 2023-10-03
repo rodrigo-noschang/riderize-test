@@ -6,5 +6,5 @@ export interface RidesRepository {
 
     fetchRides(page: number): Promise<Ride[] | null>
     fetchRideById(rideId: string): Promise<Ride | null>
-    fetchRidesByCreator(userId: string): Promise<Ride[]>
+    fetchRidesByCreator(userId: string, page: number): Promise<Ride[]>
 }

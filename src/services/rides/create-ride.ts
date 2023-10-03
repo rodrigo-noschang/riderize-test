@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { InvalidDatesError } from "../../errors/invalid-dates";
 import { RidesRepository } from "../../repositories/rides-repository";
 
-interface CreateRideUseCaseRequest {
+interface CreateRideServiceRequest {
     ride_name: string,
     start_date: Date,
     start_date_registration: Date
@@ -18,11 +18,11 @@ interface CreateRideUseCaseRequest {
     participants_limit?: number
 }
 
-export class CreateRideUseCase {
+export class CreateRideService {
     constructor(private ridesRepository: RidesRepository) { }
 
     /* ======================== aux functions ===================== */
-    private validateFields(fields: CreateRideUseCaseRequest) {
+    private validateFields(fields: CreateRideServiceRequest) {
         const fieldsSchema = z.object({
             ride_name: z.string().max(50),
             start_date: z.date(),
@@ -57,7 +57,7 @@ export class CreateRideUseCase {
     }
 
     /* ======================== main routine ===================== */
-    async execute(newRideData: CreateRideUseCaseRequest) {
+    async execute(newRideData: CreateRideServiceRequest) {
         const data = this.validateFields(newRideData);
 
         const {

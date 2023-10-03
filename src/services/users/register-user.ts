@@ -1,11 +1,10 @@
 import z from 'zod';
 import bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
 
 import { UsersRepository } from "../../repositories/users-repository";
 import { UniqueFieldConstraintError } from '../../errors/unique-field-constraint';
 
-interface RegisterUserUseCaseRequest {
+interface RegisterUserServiceRequest {
     user_name: string
     email: string
     password: string
@@ -15,15 +14,11 @@ interface RegisterUserUseCaseRequest {
     user_uf?: string
 }
 
-interface RegisterUserUseCaseResponse {
-    user: User
-}
-
-export class RegisterUserUseCase {
+export class RegisterUserService {
     constructor(private usersRepository: UsersRepository) { }
 
     /* =========================== aux functions ============================= */
-    private validateFields(fields: RegisterUserUseCaseRequest) {
+    private validateFields(fields: RegisterUserServiceRequest) {
         const fieldsSchema = z.object({
             user_name: z.string().max(50),
             email: z.string().email(),
@@ -55,7 +50,7 @@ export class RegisterUserUseCase {
     }
 
     /* ================================== main routine ================================== */
-    async execute(newUserData: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
+    async execute(newUserData: RegisterUserServiceRequest) {
         this.validateFields(newUserData);
 
         await this.checkIfEmailIsAvailable(newUserData.email);

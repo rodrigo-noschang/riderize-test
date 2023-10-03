@@ -2,13 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { InvalidDatesError } from "../../errors/invalid-dates";
 
-import { CreateRegistrationUseCase } from "./create-registration";
+import { CreateRegistrationService } from "./create-registration";
 import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
 import { InMemoryRegistrationRepository } from "../../repositories/in-memory/in-memory-registration-repository";
 
 let inMemoryRegistrationRepository: InMemoryRegistrationRepository;
 let inMemoryRidesRepository: InMemoryRidesRepository;
-let sut: CreateRegistrationUseCase
+let sut: CreateRegistrationService
 
 function registerMockedRide() {
     // MM/DD/YYYY
@@ -42,7 +42,7 @@ describe('Registration Use Case', () => {
     beforeEach(() => {
         inMemoryRegistrationRepository = new InMemoryRegistrationRepository();
         inMemoryRidesRepository = new InMemoryRidesRepository();
-        sut = new CreateRegistrationUseCase(inMemoryRegistrationRepository, inMemoryRidesRepository);
+        sut = new CreateRegistrationService(inMemoryRegistrationRepository, inMemoryRidesRepository);
 
         vi.useFakeTimers();
 

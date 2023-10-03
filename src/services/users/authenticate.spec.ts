@@ -1,18 +1,18 @@
 import bcrypt from 'bcrypt';
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { AuthenticateUserUseCase } from "./authenticate";
+import { AuthenticateUserService } from "./authenticate";
 import { InMemoryUserRepository } from "../../repositories/in-memory/in-memory-users-repository";
 
 import { InvalidCredentialsError } from "../../errors/invalid-credentials";
 
 let inMemoryRepository: InMemoryUserRepository;
-let sut: AuthenticateUserUseCase
+let sut: AuthenticateUserService
 
 describe('Authenticate User Use Case', () => {
     beforeEach(() => {
         inMemoryRepository = new InMemoryUserRepository();
-        sut = new AuthenticateUserUseCase(inMemoryRepository);
+        sut = new AuthenticateUserService(inMemoryRepository);
     })
 
     it('should be able to authenticate user', async () => {

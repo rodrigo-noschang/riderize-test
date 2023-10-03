@@ -1,25 +1,20 @@
 import z from 'zod';
 import bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
 
 import { UsersRepository } from "../../repositories/users-repository";
 
 import { InvalidCredentialsError } from "../../errors/invalid-credentials";
 
-interface AuthenticateUserUseCaseRequest {
+interface AuthenticateUserServiceRequest {
     email: string,
     password: string
 }
 
-interface AuthenticateUserUseCaseResponse {
-    user: User
-}
-
-export class AuthenticateUserUseCase {
+export class AuthenticateUserService {
     constructor(private usersRepository: UsersRepository) { }
 
     /* ============================ aux functions ===================== */
-    private validateFields(fields: AuthenticateUserUseCaseRequest) {
+    private validateFields(fields: AuthenticateUserServiceRequest) {
         const fieldsSchema = z.object({
             email: z.string().email(),
             password: z.string().min(8)
@@ -39,7 +34,7 @@ export class AuthenticateUserUseCase {
     }
 
     /* =========================== main routine ======================== */
-    async execute({ email, password }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserUseCaseResponse | null> {
+    async execute({ email, password }: AuthenticateUserServiceRequest) {
         this.validateFields({ email, password });
 
         const existingUser = await this.checkIfEmailIsRegistered(email);

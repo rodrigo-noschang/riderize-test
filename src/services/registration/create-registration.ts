@@ -7,19 +7,19 @@ import { RegistrationRepository } from "../../repositories/registrations-reposit
 import { InvalidDatesError } from "../../errors/invalid-dates";
 import { InstanceNotFoundError } from "../../errors/instance-not-found";
 
-interface CreateRegistrationUseCaseRequest {
+interface CreateRegistrationServiceRequest {
     userId: string,
     rideId: string
 }
 
-export class CreateRegistrationUseCase {
+export class CreateRegistrationService {
     constructor(
         private registrationsRepository: RegistrationRepository,
         private ridesRepository: RidesRepository
     ) { }
 
     /* ====================== aux functions ========================== */
-    private validateFields(fields: CreateRegistrationUseCaseRequest) {
+    private validateFields(fields: CreateRegistrationServiceRequest) {
         const fieldsSchema = z.object({
             userId: z.string(),
             rideId: z.string()
@@ -47,7 +47,7 @@ export class CreateRegistrationUseCase {
     }
 
     /* ========================== main routine ============================ */
-    async execute(newRegistrationData: CreateRegistrationUseCaseRequest) {
+    async execute(newRegistrationData: CreateRegistrationServiceRequest) {
         const data = this.validateFields(newRegistrationData);
 
         const rideExists = await this.checkIfRideExists(data.rideId);

@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { RegisterUserUseCase } from './register-user';
+import { RegisterUserService } from './register-user';
 import { InMemoryUserRepository } from '../../repositories/in-memory/in-memory-users-repository';
 
 import { UniqueFieldConstraintError } from '../../errors/unique-field-constraint';
 
 let inMemoryRepository: InMemoryUserRepository;
-let sut: RegisterUserUseCase
+let sut: RegisterUserService
 
 describe('Register Use Case', () => {
     beforeEach(() => {
         inMemoryRepository = new InMemoryUserRepository();
-        sut = new RegisterUserUseCase(inMemoryRepository);
+        sut = new RegisterUserService(inMemoryRepository);
     })
 
     it('should be able to register a new user', async () => {

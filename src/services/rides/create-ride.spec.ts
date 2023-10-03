@@ -1,18 +1,18 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import dayjs from "dayjs";
 
-import { CreateRideUseCase } from "./create-ride";
+import { CreateRideService } from "./create-ride";
 import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
 
 import { InvalidDatesError } from "../../errors/invalid-dates";
 
 let inMemoryRidesRepository: InMemoryRidesRepository
-let sut: CreateRideUseCase
+let sut: CreateRideService
 
 describe('Create Ride Use Case', () => {
     beforeEach(() => {
         inMemoryRidesRepository = new InMemoryRidesRepository();
-        sut = new CreateRideUseCase(inMemoryRidesRepository);
+        sut = new CreateRideService(inMemoryRidesRepository);
     })
 
     it('should be able to create new Ride', async () => {

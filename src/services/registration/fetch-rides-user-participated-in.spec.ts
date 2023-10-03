@@ -1,16 +1,16 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { FetchRidesUserParticipatedInUseCase } from "./fetch-rides-user-participated-in";
+import { FetchRidesUserParticipatedInService } from "./fetch-rides-user-participated-in";
 import { InMemoryRegistrationRepository } from "../../repositories/in-memory/in-memory-registration-repository";
 
 let inMemoryRegistrationsRepository: InMemoryRegistrationRepository;
-let sut: FetchRidesUserParticipatedInUseCase;
+let sut: FetchRidesUserParticipatedInService;
 
 describe('Fetch Rides A User Participated In', () => {
     beforeEach(() => {
 
         inMemoryRegistrationsRepository = new InMemoryRegistrationRepository();
-        sut = new FetchRidesUserParticipatedInUseCase(inMemoryRegistrationsRepository);
+        sut = new FetchRidesUserParticipatedInService(inMemoryRegistrationsRepository);
     })
 
     it('should fetch the rides a user registered to', async () => {

@@ -3,6 +3,39 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AuthenticateUser {
+  token: String!
+}
+
+input AuthenticateUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  authenticateUser(data: AuthenticateUserInput!): AuthenticateUser!
+  registerUser(data: RegisterUserInput!): UserModel!
+}
+
 type Query {
-  helloWorld: String!
+  users: [UserModel!]!
+}
+
+input RegisterUserInput {
+  email: String!
+  password: String!
+  phone: String
+  user_city: String
+  user_name: String!
+  user_uf: String
+}
+
+type UserModel {
+  email: String!
+  password_hash: String!
+  phone: String
+  user_city: String
+  user_id: ID!
+  user_name: String!
+  user_uf: String
 }

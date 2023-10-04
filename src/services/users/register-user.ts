@@ -63,7 +63,7 @@ export class RegisterUserService {
 
         const createdUser = await this.usersRepository.create({
             ...newUserData,
-            password_hash,
+            password_hash
         });
 
         return {

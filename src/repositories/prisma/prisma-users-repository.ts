@@ -5,8 +5,13 @@ import { UsersRepository } from "../users-repository";
 
 export class PrismaUsersRepository implements UsersRepository {
     async create(data: Prisma.UserCreateInput) {
+        const dataWithoutPassword = {
+            ...data,
+            password: undefined
+        };
+
         const newUser = await prisma.user.create({
-            data
+            data: dataWithoutPassword
         });
 
         return newUser;

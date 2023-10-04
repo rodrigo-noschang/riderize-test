@@ -1,5 +1,6 @@
 export class InvalidDatesError extends Error {
     message = '';
+    type = 'DATE_RELATED_ERROR';
 
     constructor(message: string) {
         super();

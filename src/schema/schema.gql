@@ -18,6 +18,7 @@ type Mutation {
 }
 
 type Query {
+  tryToken: String!
   users: [UserModel!]!
 }
 

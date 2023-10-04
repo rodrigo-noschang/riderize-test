@@ -13,16 +13,9 @@ async function main() {
         resolvers: [UserResolver],
         emitSchemaFile: path.resolve(__dirname, 'src', 'schema', 'schema.gql'),
         authChecker: ({ context }) => {
-            const stringObject = context;
+            const userId = context;
 
-            const token = extractTokenFromStringObject(stringObject);
-            if (!token) return false;
-
-            const tokenData = getUserNameFromToken(token);
-
-            const { user } = tokenData as any;
-
-            return !!user;
+            return !!userId;
         }
     });
 
@@ -35,8 +28,18 @@ async function main() {
             port: 4000
         },
         context: ({ req }) => {
-            const data = req.headers.authorization;
-            return data;
+            const stringObject = req.headers.authorization;
+
+            const token = extractTokenFromStringObject(stringObject);
+            if (!token) return false;
+
+            const tokenData = getUserNameFromToken(token);
+
+            const { userId } = tokenData as any;
+
+            return {
+                userId
+            }
         }
     })
 

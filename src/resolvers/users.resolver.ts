@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 import { GraphQLError } from "graphql";
-import { Arg, Mutation, Query, Resolver, Authorized } from "type-graphql";
+import { Arg, Mutation, Query, Resolver, Authorized, Ctx } from "type-graphql";
 
 import { RegisterUserService } from "../services/users/register-user";
 import { AuthenticateUserService } from "../services/users/authenticate";
@@ -18,15 +18,25 @@ import {
 
 import { UniqueFieldConstraintError } from "../errors/unique-field-constraint";
 import { generateTokenWithUserId } from "../utils/token-related";
-import { InstanceNotFoundError } from "../errors/instance-not-found";
 import { InvalidCredentialsError } from "../errors/invalid-credentials";
 
+interface Context {
+    userId: string
+}
 
 @Resolver()
 export class UserResolver {
     @Query(returns => [UserModel])
     async users() {
         return [];
+    }
+
+    @Authorized()
+    @Query(() => String)
+    async tryToken(
+        @Ctx() ctx: Context
+    ) {
+        return `Access granted to ${ctx.userId}`;
     }
 
     @Mutation(() => UserModel)

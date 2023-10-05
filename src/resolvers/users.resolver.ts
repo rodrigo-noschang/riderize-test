@@ -20,10 +20,6 @@ import { UniqueFieldConstraintError } from "../errors/unique-field-constraint";
 import { generateTokenWithUserId } from "../utils/token-related";
 import { InvalidCredentialsError } from "../errors/invalid-credentials";
 
-interface Context {
-    userId: string
-}
-
 @Resolver()
 export class UserResolver {
     @Query(returns => [UserModel])
@@ -31,13 +27,13 @@ export class UserResolver {
         return [];
     }
 
-    @Authorized()
-    @Query(() => String)
-    async tryToken(
-        @Ctx() ctx: Context
-    ) {
-        return `Access granted to ${ctx.userId}`;
-    }
+    // @Authorized()
+    // @Query(() => String)
+    // async tryToken(
+    //     @Ctx() ctx: AuthContext
+    // ) {
+    //     return `Access granted to ${ctx.userId}`;
+    // }
 
     @Mutation(() => UserModel)
     async registerUser(

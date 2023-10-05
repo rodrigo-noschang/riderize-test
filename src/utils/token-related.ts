@@ -2,6 +2,9 @@ import jwt from 'jsonwebtoken';
 
 import { env } from "../env";
 
+export interface AuthContext {
+    userId: string
+}
 
 export function generateTokenWithUserId(userId: string) {
     const jwtSecret = env.JWT_SECRET;

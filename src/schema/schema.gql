@@ -12,14 +12,42 @@ input AuthenticateUserInput {
   password: String!
 }
 
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+input FetchRidesCreatedByUserInput {
+  page: Float = 1
+  userId: String!
+}
+
+input FetchRidesInput {
+  page: Float = 1
+}
+
 type Mutation {
   authenticateUser(data: AuthenticateUserInput!): AuthenticateUser!
+  registerRide(data: RegisterRideInput!): RideModel!
   registerUser(data: RegisterUserInput!): UserModel!
 }
 
 type Query {
-  tryToken: String!
+  fetchRides(data: FetchRidesInput!): [RideModel!]!
+  fetchRidesCreatedByUser(data: FetchRidesCreatedByUserInput!): [RideModel!]!
   users: [UserModel!]!
+}
+
+input RegisterRideInput {
+  additional_information: String
+  end_date_registration: DateTimeISO!
+  participants_limit: Float
+  ride_city: String!
+  ride_name: String!
+  ride_uf: String!
+  start_date: DateTimeISO!
+  start_date_registration: DateTimeISO!
+  start_place: String!
 }
 
 input RegisterUserInput {
@@ -29,6 +57,20 @@ input RegisterUserInput {
   user_city: String
   user_name: String!
   user_uf: String
+}
+
+type RideModel {
+  additional_information: String
+  creator_id: String!
+  end_date_registration: DateTimeISO!
+  participants_limit: Float
+  ride_city: String!
+  ride_id: ID!
+  ride_name: String!
+  ride_uf: String!
+  start_date: DateTimeISO!
+  start_date_registration: DateTimeISO!
+  start_place: String!
 }
 
 type UserModel {

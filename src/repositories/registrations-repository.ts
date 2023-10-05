@@ -5,4 +5,5 @@ export interface RegistrationRepository {
 
     fetchRideRegisteredUsers(rideId: string, page: number): Promise<User[]>
     fetchRidesUserRegisteredTo(userId: string, page: number): Promise<Ride[]>
+    fetchAllOfUsersRegistrations(userId: string): Promise<Registration[]>
 }

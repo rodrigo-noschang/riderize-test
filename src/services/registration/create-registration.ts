@@ -6,6 +6,7 @@ import { RegistrationRepository } from "../../repositories/registrations-reposit
 
 import { InvalidDatesError } from "../../errors/invalid-dates";
 import { InstanceNotFoundError } from "../../errors/instance-not-found";
+import { AlreadyRegisteredError } from "../../errors/already-registered";
 
 interface CreateRegistrationServiceRequest {
     userId: string,
@@ -46,6 +47,16 @@ export class CreateRegistrationService {
         )
     }
 
+    private async checkIfUserIsAlreadyRegisteredToThisRide(userId: string, rideId: string) {
+        const userRegistrations = await this.registrationsRepository.fetchAllOfUsersRegistrations(userId);
+
+        const isRegisteredToThisRide = userRegistrations.find(registration => {
+            return registration.ride_id === rideId;
+        })
+
+        return isRegisteredToThisRide;
+    }
+
     /* ========================== main routine ============================ */
     async execute(newRegistrationData: CreateRegistrationServiceRequest) {
         const data = this.validateFields(newRegistrationData);
@@ -62,6 +73,10 @@ export class CreateRegistrationService {
         if (!isRegistrationAllowed) {
             throw new InvalidDatesError('registration period is over or did not start yet');
         }
+
+        const isUserRegisteredToThisRide = await this.checkIfUserIsAlreadyRegisteredToThisRide(data.userId, data.rideId);
+
+        if (isUserRegisteredToThisRide) throw new AlreadyRegisteredError();
 
         const registration = await this.registrationsRepository.create({
             user_id: data.userId,

@@ -32,6 +32,17 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
         return response.map(res => res.user);
     }
 
+    async fetchAllOfUsersRegistrations(userId: string) {
+
+        const response = await prisma.registration.findMany({
+            where: {
+                user_id: userId
+            }
+        })
+
+        return response;
+    }
+
     async fetchRidesUserRegisteredTo(userId: string, page: number) {
         const take = CONTENT_PER_PAGE;
         const skip = CONTENT_PER_PAGE * (page - 1);

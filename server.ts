@@ -1,20 +1,22 @@
 import 'reflect-metadata';
 
 import path from 'node:path';
-import { GraphQLError } from 'graphql';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 
 import { UserResolver } from './src/resolvers/users.resolver';
 import { RidesResolver } from './src/resolvers/rides.resolver';
+import { RegistrationsResolver } from './src/resolvers/registrations.resolver';
+
 import { extractTokenFromStringObject, getUserNameFromToken } from './src/utils/token-related';
 
 async function main() {
     const schema = await buildSchema({
         resolvers: [
             UserResolver,
-            RidesResolver
+            RidesResolver,
+            RegistrationsResolver
         ],
         emitSchemaFile: path.resolve(__dirname, 'src', 'schema', 'schema.gql'),
         authChecker: ({ context }) => {

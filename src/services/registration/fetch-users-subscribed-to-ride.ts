@@ -26,12 +26,8 @@ export class FetchUsersSubscribedToRideService {
 
         const rideRegistrations = await this.registrationRepository.fetchRideRegisteredUsers(rideId, page);
 
-        const registeredUsers = rideRegistrations.map(registration => {
-            return registration.user_id;
-        })
-
         return {
-            users: registeredUsers
+            users: rideRegistrations
         }
     }
 }

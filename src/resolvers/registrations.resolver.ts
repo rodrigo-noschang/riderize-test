@@ -1,6 +1,6 @@
+import { ZodError } from "zod";
+import { GraphQLError } from "graphql";
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-
-import { AuthContext } from "../utils/token-related";
 
 import { RideModel } from "../dtos/models/rides.model";
 import { UserModel } from "../dtos/models/users.model";
@@ -13,6 +13,12 @@ import { PrismaRegistrationRepository } from "../repositories/prisma/prisma-regi
 import { FetchUsersSubscribedToRideService } from "../services/registration/fetch-users-subscribed-to-ride";
 import { FetchRidesUserParticipatedInService } from "../services/registration/fetch-rides-user-participated-in";
 
+import { AuthContext } from "../utils/token-related";
+import { InvalidDatesError } from "../errors/invalid-dates";
+import { InstanceNotFoundError } from "../errors/instance-not-found";
+import { AlreadyRegisteredError } from "../errors/already-registered";
+
+
 @Resolver()
 export class RegistrationsResolver {
 
@@ -22,19 +28,52 @@ export class RegistrationsResolver {
         @Arg('data') data: CreateRegistrationInput,
         @Ctx() ctx: AuthContext
     ) {
-        const { userId } = ctx;
-        const { rideId } = data;
 
-        const prismaRegistrationRepository = new PrismaRegistrationRepository();
-        const prismaRidesRepository = new PrismaRidesRepository();
-        const service = new CreateRegistrationService(
-            prismaRegistrationRepository,
-            prismaRidesRepository
-        );
+        try {
+            const { userId } = ctx;
+            const { rideId } = data;
 
-        const { registration } = await service.execute({ rideId, userId });
+            const prismaRegistrationRepository = new PrismaRegistrationRepository();
+            const prismaRidesRepository = new PrismaRidesRepository();
+            const service = new CreateRegistrationService(
+                prismaRegistrationRepository,
+                prismaRidesRepository
+            );
 
-        return registration;
+            const { registration } = await service.execute({ rideId, userId });
+
+            return registration;
+        } catch (error) {
+            let errorMessage = '';
+            let errorType = '';
+
+            if (error instanceof ZodError) {
+                errorMessage = JSON.stringify(error.format());
+                errorType = 'FIELD_VALIDATION';
+            }
+
+            if (error instanceof InstanceNotFoundError) {
+                errorMessage = error.message;
+                errorType = error.type;
+            }
+
+            if (error instanceof InvalidDatesError) {
+                errorMessage = error.message;
+                errorType = error.type;
+            }
+
+            if (error instanceof AlreadyRegisteredError) {
+                errorMessage = error.message;
+                errorType = error.type;
+            }
+
+            throw new GraphQLError(errorMessage, {
+                extensions: {
+                    errorType
+                }
+            });
+
+        }
     }
 
     @Authorized()

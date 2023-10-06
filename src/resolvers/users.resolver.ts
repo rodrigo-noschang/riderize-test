@@ -27,14 +27,6 @@ export class UserResolver {
         return [];
     }
 
-    // @Authorized()
-    // @Query(() => String)
-    // async tryToken(
-    //     @Ctx() ctx: AuthContext
-    // ) {
-    //     return `Access granted to ${ctx.userId}`;
-    // }
-
     @Mutation(() => UserModel)
     async registerUser(
         @Arg('data') data: RegisterUserInput

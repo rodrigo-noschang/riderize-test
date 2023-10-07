@@ -9,7 +9,10 @@ import { UserResolver } from './src/resolvers/users.resolver';
 import { RidesResolver } from './src/resolvers/rides.resolver';
 import { RegistrationsResolver } from './src/resolvers/registrations.resolver';
 
+import { env } from './src/env';
 import { extractTokenFromStringObject, getUserNameFromToken } from './src/utils/token-related';
+
+const PORT = env.PORT;
 
 async function main() {
     const schema = await buildSchema({
@@ -32,7 +35,7 @@ async function main() {
 
     const { url } = await startStandaloneServer(server, {
         listen: {
-            port: 4000
+            port: PORT
         },
         context: ({ req }) => {
             const stringObject = req.headers.authorization;

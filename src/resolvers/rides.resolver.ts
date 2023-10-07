@@ -10,8 +10,21 @@ import { CreateRideService } from "../services/rides/create-ride";
 import { PrismaRidesRepository } from "../repositories/prisma/prisma-rides-repository";
 import { FetchRidesCreatedByUserService } from "../services/rides/fetch-rides-created-by-user";
 
+import { redis } from "../db/redis";
 import { AuthContext } from "../utils/token-related";
 import { InvalidDatesError } from "../errors/invalid-dates";
+
+async function readFromCache() {
+    const cachedData = await redis.get('rides');
+
+    return cachedData ? JSON.parse(cachedData) as RideModel[] : null;
+}
+
+async function writeOnCache(data: any) {
+    const stringifiedData = JSON.stringify(data);
+
+    await redis.set('rides', stringifiedData, 'EX', 20);
+}
 
 
 @Resolver()
@@ -80,11 +93,18 @@ export class RidesResolver {
     ) {
         const { page } = data;
 
-        const prismaRepository = new PrismaRidesRepository();
-        const service = new FetchRidesService(prismaRepository);
+        const cachedRides = await readFromCache();
 
-        const { rides } = await service.execute({ page });
+        if (!cachedRides) {
+            const prismaRepository = new PrismaRidesRepository();
+            const service = new FetchRidesService(prismaRepository);
 
-        return rides;
+            const { rides } = await service.execute({ page });
+
+            await writeOnCache(rides);
+            return rides;
+        }
+
+        return cachedRides;
     }
 }

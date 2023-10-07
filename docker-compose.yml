@@ -9,3 +9,7 @@ services:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=riderize-ride
+  riderize-redis:
+    image: redis:latest
+    ports:
+      - 6379:6379

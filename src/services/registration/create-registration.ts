@@ -1,5 +1,6 @@
 import z from "zod";
 import dayjs from "dayjs";
+import { Ride } from "@prisma/client";
 
 import { RidesRepository } from "../../repositories/rides-repository";
 import { RegistrationRepository } from "../../repositories/registrations-repository";
@@ -7,6 +8,7 @@ import { RegistrationRepository } from "../../repositories/registrations-reposit
 import { InvalidDatesError } from "../../errors/invalid-dates";
 import { InstanceNotFoundError } from "../../errors/instance-not-found";
 import { AlreadyRegisteredError } from "../../errors/already-registered";
+import { RideCreatorCanNotRegisterError } from "../../errors/ride-creator-can-not-register";
 
 interface CreateRegistrationServiceRequest {
     userId: string,
@@ -57,6 +59,12 @@ export class CreateRegistrationService {
         return isRegisteredToThisRide;
     }
 
+    private async checkIfUserIsOwnRide(ride: Ride, userId: string) {
+        const rideCreatorId = ride.creator_id;
+
+        return rideCreatorId === userId
+    }
+
     /* ========================== main routine ============================ */
     async execute(newRegistrationData: CreateRegistrationServiceRequest) {
         const data = this.validateFields(newRegistrationData);
@@ -75,8 +83,10 @@ export class CreateRegistrationService {
         }
 
         const isUserRegisteredToThisRide = await this.checkIfUserIsAlreadyRegisteredToThisRide(data.userId, data.rideId);
-
         if (isUserRegisteredToThisRide) throw new AlreadyRegisteredError();
+
+        const isUserTheRideCreator = await this.checkIfUserIsOwnRide(rideExists, data.userId);
+        if (isUserTheRideCreator) throw new RideCreatorCanNotRegisterError();
 
         const registration = await this.registrationsRepository.create({
             user_id: data.userId,

@@ -17,6 +17,7 @@ import { AuthContext } from "../utils/token-related";
 import { InvalidDatesError } from "../errors/invalid-dates";
 import { InstanceNotFoundError } from "../errors/instance-not-found";
 import { AlreadyRegisteredError } from "../errors/already-registered";
+import { RideCreatorCanNotRegisterError } from "../errors/ride-creator-can-not-register";
 
 
 @Resolver()
@@ -52,17 +53,12 @@ export class RegistrationsResolver {
                 errorType = 'FIELD_VALIDATION';
             }
 
-            if (error instanceof InstanceNotFoundError) {
-                errorMessage = error.message;
-                errorType = error.type;
-            }
-
-            if (error instanceof InvalidDatesError) {
-                errorMessage = error.message;
-                errorType = error.type;
-            }
-
-            if (error instanceof AlreadyRegisteredError) {
+            if (
+                error instanceof InstanceNotFoundError ||
+                error instanceof InvalidDatesError ||
+                error instanceof AlreadyRegisteredError ||
+                error instanceof RideCreatorCanNotRegisterError
+            ) {
                 errorMessage = error.message;
                 errorType = error.type;
             }
@@ -72,7 +68,6 @@ export class RegistrationsResolver {
                     errorType
                 }
             });
-
         }
     }
 

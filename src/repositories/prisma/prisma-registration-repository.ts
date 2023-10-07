@@ -14,7 +14,7 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
         return newRegistration;
     }
 
-    async fetchRideRegisteredUsers(rideId: string, page: number) {
+    async fetchUsersRegisteredToARide(rideId: string, page: number) {
         const take = CONTENT_PER_PAGE;
         const skip = CONTENT_PER_PAGE * (page - 1);
 

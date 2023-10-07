@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { InvalidDatesError } from "../../errors/invalid-dates";
+import { RideCreatorCanNotRegisterError } from "../../errors/ride-creator-can-not-register";
 
 import { CreateRegistrationService } from "./create-registration";
 import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
@@ -38,7 +39,7 @@ function clearMockedRides() {
     inMemoryRidesRepository.rides = [];
 }
 
-describe('Registration Use Case', () => {
+describe('Create Registration Use Case', () => {
     beforeEach(() => {
         inMemoryRegistrationRepository = new InMemoryRegistrationRepository();
         inMemoryRidesRepository = new InMemoryRidesRepository();
@@ -61,7 +62,7 @@ describe('Registration Use Case', () => {
 
         const { registration } = await sut.execute({
             rideId: 'ride-01',
-            userId: 'user-01'
+            userId: 'user-02'
         });
 
         expect(registration.registration_id).toEqual(expect.any(String));
@@ -74,7 +75,7 @@ describe('Registration Use Case', () => {
         await expect(() => {
             return sut.execute({
                 rideId: 'ride-01',
-                userId: 'user-01'
+                userId: 'user-02'
             });
         }).rejects.toBeInstanceOf(InvalidDatesError);
     })
@@ -85,7 +86,7 @@ describe('Registration Use Case', () => {
 
         const { registration } = await sut.execute({
             rideId: 'ride-01',
-            userId: 'user-01'
+            userId: 'user-02'
         });
 
         expect(registration.registration_id).toEqual(expect.any(String));
@@ -97,9 +98,21 @@ describe('Registration Use Case', () => {
 
         const { registration } = await sut.execute({
             rideId: 'ride-01',
-            userId: 'user-01'
+            userId: 'user-02'
         });
 
         expect(registration.registration_id).toEqual(expect.any(String));
+    })
+
+    it('should not be able to register to a ride created by himself', async () => {
+        const inRegistrationPeriodDate = new Date('10/05/2023');
+        vi.setSystemTime(inRegistrationPeriodDate);
+
+        await expect(() => {
+            return sut.execute({
+                rideId: 'ride-01',
+                userId: 'user-01'
+            })
+        }).rejects.toBeInstanceOf(RideCreatorCanNotRegisterError);
     })
 })

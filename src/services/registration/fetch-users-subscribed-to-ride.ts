@@ -24,7 +24,7 @@ export class FetchUsersSubscribedToRideService {
     async execute(fetchData: FetchUsersSubscribedToRideServiceRequest) {
         const { rideId, page } = this.validateFields(fetchData);
 
-        const rideRegistrations = await this.registrationRepository.fetchRideRegisteredUsers(rideId, page);
+        const rideRegistrations = await this.registrationRepository.fetchUsersRegisteredToARide(rideId, page);
 
         return {
             users: rideRegistrations

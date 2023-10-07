@@ -1,7 +1,16 @@
 version: '3'
 
 services:
-  riderize-pg:
+  app:
+    build: .
+    command: npm run dev
+    environment:
+      - DATABASE_URL=postgresql://docker:docker@localhost:5432/riderize-ride?schema=public
+    depends_on:
+      - riderize-postgres
+    ports:
+      - 4000:4000
+  riderize-postgres:
     image: bitnami/postgresql
     ports:
       - 5432:5432
@@ -9,7 +18,7 @@ services:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=riderize-ride
-  riderize-redis:
+  riderize-redis-cache:
     image: redis:latest
     ports:
       - 6379:6379

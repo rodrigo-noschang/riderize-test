@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only server.ts",
-    "start": "tsnd --respawn --transpile-only server.ts",
+    "start": "tsnd --transpile-only server.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

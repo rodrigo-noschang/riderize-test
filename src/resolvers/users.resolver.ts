@@ -78,7 +78,7 @@ export class UserResolver {
 
             return {
                 token,
-                deployMessage: 'Hello user'
+                deployMessage: 'Hello people, the deploy went through!'
             };
         } catch (error) {
             let errorMessage = '';

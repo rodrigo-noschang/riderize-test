@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 import { GraphQLError } from "graphql";
-import { Arg, Mutation, Query, Resolver, Authorized, Ctx } from "type-graphql";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
 
 import { RegisterUserService } from "../services/users/register-user";
 import { AuthenticateUserService } from "../services/users/authenticate";

@@ -102,7 +102,7 @@ export class RidesResolver {
             const { rides } = await service.execute({ page });
 
             await writeOnCache(rides);
-            return rides;
+            return [rides];
         }
 
         return cachedRides;

@@ -43,8 +43,6 @@ export class UserResolver {
             let errorMessage = '';
             let errorType = '';
 
-            console.log(error);
-
             if (error instanceof ZodError) {
                 errorMessage = JSON.stringify(error.format());
                 errorType = 'FIELD_VALIDATION';

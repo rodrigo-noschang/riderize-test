@@ -76,10 +76,7 @@ export class UserResolver {
 
             const token = generateTokenWithUserId(user.user_id);
 
-            return {
-                token,
-                deployMessage: 'Hello world'
-            };
+            return { token };
         } catch (error) {
             let errorMessage = '';
             let errorType = '';

@@ -28,8 +28,4 @@ export class UserModel {
 export class AuthenticateUser {
     @Field()
     token: string
-
-    // REMOVE THIS
-    @Field()
-    deployMessage: String
 }

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only server.ts",
+    "prestart": "npx prisma migrate deploy",
     "start": "tsnd --transpile-only server.ts",
     "test": "vitest run",
     "test:watch": "vitest"

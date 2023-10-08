@@ -11,7 +11,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 19
+          node-version: 19w
           cache: 'npm'
   
       - run: npm ci

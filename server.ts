@@ -12,7 +12,7 @@ import { RegistrationsResolver } from './src/resolvers/registrations.resolver';
 import { env } from './src/env';
 import { extractTokenFromStringObject, getUserNameFromToken } from './src/utils/token-related';
 
-const PORT = env.PORT;
+const PORT = env.PORT || 4000;
 
 async function main() {
     const schema = await buildSchema({

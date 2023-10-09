@@ -99,7 +99,6 @@ type RideModel {
 
 type UserModel {
   email: String!
-  password_hash: String!
   phone: String
   user_city: String
   user_id: ID!

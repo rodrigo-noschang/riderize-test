@@ -11,9 +11,6 @@ export class UserModel {
     @Field(type => String)
     email: string;
 
-    @Field(type => String)
-    password_hash: string;
-
     @Field(type => String, { nullable: true })
     phone?: string;
 

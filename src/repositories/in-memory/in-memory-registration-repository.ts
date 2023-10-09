@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { Prisma, Registration } from "@prisma/client";
+import { Prisma, Registration, Ride, User } from "@prisma/client";
 
 import { RegistrationRepository } from "../registrations-repository";
+import { InMemoryUserRepository } from './in-memory-users-repository';
 import { InMemoryRidesRepository } from './in-memory-rides-repository';
 
 const DATA_PER_PAGE = 15;
@@ -29,9 +30,9 @@ export class InMemoryRegistrationRepository implements RegistrationRepository {
             return registration.ride_id === rideId;
         })
 
-        const paginatedRides = rideRegistrations.slice(skip, take);
+        const paginatedRideRegistrations = rideRegistrations.slice(skip, take);
 
-        return paginatedRides;
+        return paginatedRideRegistrations;
     }
 
     async fetchRidesUserRegisteredTo(userId: string, page: number) {
@@ -42,16 +43,8 @@ export class InMemoryRegistrationRepository implements RegistrationRepository {
             return registration.user_id === userId
         });
 
-        const paginatedUsers = ridesUserRegisteredTo.slice(skip, take);
+        const paginatedUserRegistrations = ridesUserRegisteredTo.slice(skip, take);
 
-        return paginatedUsers;
-    }
-
-    async fetchAllOfUsersRegistrations(userId: string) {
-        const registrations = this.registrations.filter(reg => {
-            reg.user_id == userId;
-        })
-
-        return registrations;
+        return paginatedUserRegistrations;
     }
 }

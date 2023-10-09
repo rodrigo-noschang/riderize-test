@@ -74,16 +74,34 @@ export class RidesResolver {
     @Authorized()
     @Query(returns => [RideModel])
     async fetchRidesCreatedByUser(
-        @Arg('data') data: FetchRidesCreatedByUserInput
+        @Arg('data') data: FetchRidesCreatedByUserInput,
+        @Ctx() ctx: AuthContext
     ) {
-        const { page, userId } = data;
+        try {
+            const { page, userId } = data;
 
-        const prismaRepository = new PrismaRidesRepository();
-        const service = new FetchRidesCreatedByUserService(prismaRepository);
+            const prismaRepository = new PrismaRidesRepository();
+            const service = new FetchRidesCreatedByUserService(prismaRepository);
 
-        const { rides } = await service.execute({ page, userId });
+            const { rides } = await service.execute({ page, userId });
 
-        return rides
+            return rides
+
+        } catch (error) {
+            let errorMessage = '';
+            let errorType = '';
+
+            if (error instanceof ZodError) {
+                errorMessage = JSON.stringify(error.format());
+                errorType = 'FIELD_VALIDATION';
+            }
+
+            throw new GraphQLError(errorMessage, {
+                extensions: {
+                    errorType
+                }
+            });
+        }
     }
 
     @Authorized()
@@ -91,20 +109,38 @@ export class RidesResolver {
     async fetchRides(
         @Arg('data') data: FetchRidesInput
     ) {
-        const { page } = data;
+        try {
+            const { page } = data;
 
-        const cachedRides = await readFromCache();
+            const cachedRides = await readFromCache();
 
-        if (!cachedRides) {
-            const prismaRepository = new PrismaRidesRepository();
-            const service = new FetchRidesService(prismaRepository);
+            if (!cachedRides) {
+                const prismaRepository = new PrismaRidesRepository();
+                const service = new FetchRidesService(prismaRepository);
 
-            const { rides } = await service.execute({ page });
+                const { rides } = await service.execute({ page });
 
-            await writeOnCache(rides);
-            return rides;
+                await writeOnCache(rides);
+                return rides;
+            }
+
+            return cachedRides;
+
+        } catch (error) {
+            let errorMessage = '';
+            let errorType = '';
+
+            if (error instanceof ZodError) {
+                errorMessage = JSON.stringify(error.format());
+                errorType = 'FIELD_VALIDATION';
+            }
+
+            throw new GraphQLError(errorMessage, {
+                extensions: {
+                    errorType
+                }
+            });
         }
 
-        return cachedRides;
     }
 }

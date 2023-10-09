@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-import { RegistrationRepository } from "../registrations-repository";
+import { CreateResponse, RegistrationRepository } from "../registrations-repository";
 import { prisma } from "../../db/prisma";
 
 const CONTENT_PER_PAGE = 15;
@@ -11,7 +11,17 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
             data
         });
 
-        return newRegistration;
+        const registration = await prisma.registration.findUnique({
+            where: {
+                registration_id: newRegistration.registration_id
+            },
+            select: {
+                user: true,
+                ride: true
+            }
+        }) as CreateResponse
+
+        return registration;
     }
 
     async fetchUsersRegisteredToARide(rideId: string, page: number) {
@@ -30,17 +40,6 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
         });
 
         return response.map(res => res.user);
-    }
-
-    async fetchAllOfUsersRegistrations(userId: string) {
-
-        const response = await prisma.registration.findMany({
-            where: {
-                user_id: userId
-            }
-        })
-
-        return response;
     }
 
     async fetchRidesUserRegisteredTo(userId: string, page: number) {

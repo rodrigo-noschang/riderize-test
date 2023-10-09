@@ -17,6 +17,7 @@ import { AuthContext } from "../utils/token-related";
 import { InvalidDatesError } from "../errors/invalid-dates";
 import { InstanceNotFoundError } from "../errors/instance-not-found";
 import { AlreadyRegisteredError } from "../errors/already-registered";
+import { UnableToRegisterErrorUserToRideError } from "../errors/unable-to-register";
 import { RideCreatorCanNotRegisterError } from "../errors/ride-creator-can-not-register";
 
 
@@ -29,7 +30,6 @@ export class RegistrationsResolver {
         @Arg('data') data: CreateRegistrationInput,
         @Ctx() ctx: AuthContext
     ) {
-
         try {
             const { userId } = ctx;
             const { rideId } = data;
@@ -43,7 +43,10 @@ export class RegistrationsResolver {
 
             const { registration } = await service.execute({ rideId, userId });
 
+            if (!registration) throw new UnableToRegisterErrorUserToRideError();;
+
             return registration;
+
         } catch (error) {
             let errorMessage = '';
             let errorType = '';
@@ -54,10 +57,11 @@ export class RegistrationsResolver {
             }
 
             if (
-                error instanceof InstanceNotFoundError ||
                 error instanceof InvalidDatesError ||
+                error instanceof InstanceNotFoundError ||
                 error instanceof AlreadyRegisteredError ||
-                error instanceof RideCreatorCanNotRegisterError
+                error instanceof RideCreatorCanNotRegisterError ||
+                error instanceof UnableToRegisterErrorUserToRideError
             ) {
                 errorMessage = error.message;
                 errorType = error.type;
@@ -76,14 +80,32 @@ export class RegistrationsResolver {
     async fetchRidesUserParticipatedIn(
         @Arg('data') data: FetchRidesUserParticipatedInInput
     ) {
-        const { userId, page } = data;
+        try {
+            const { userId, page } = data;
 
-        const prismaRepository = new PrismaRegistrationRepository();
-        const service = new FetchRidesUserParticipatedInService(prismaRepository);
+            const prismaRepository = new PrismaRegistrationRepository();
+            const service = new FetchRidesUserParticipatedInService(prismaRepository);
 
-        const { rides } = await service.execute({ userId, page });
+            const { rides } = await service.execute({ userId, page });
 
-        return rides;
+            return rides;
+
+        } catch (error) {
+            let errorMessage = '';
+            let errorType = '';
+
+            if (error instanceof ZodError) {
+                errorMessage = JSON.stringify(error.format());
+                errorType = 'FIELD_VALIDATION';
+            }
+
+            throw new GraphQLError(errorMessage, {
+                extensions: {
+                    errorType
+                }
+            });
+        }
+
     }
 
     @Authorized()
@@ -91,13 +113,31 @@ export class RegistrationsResolver {
     async fetchUsersSubscribedToRide(
         @Arg('data') data: FetchUsersSubscribedToRideInput
     ) {
-        const { rideId, page } = data;
+        try {
+            const { rideId, page } = data;
 
-        const prismaRepository = new PrismaRegistrationRepository();
-        const service = new FetchUsersSubscribedToRideService(prismaRepository);
+            const prismaRepository = new PrismaRegistrationRepository();
+            const service = new FetchUsersSubscribedToRideService(prismaRepository);
 
-        const { users } = await service.execute({ rideId, page });
+            const { users } = await service.execute({ rideId, page });
 
-        return users;
+            return users;
+
+        } catch (error) {
+            let errorMessage = '';
+            let errorType = '';
+
+            if (error instanceof ZodError) {
+                errorMessage = JSON.stringify(error.format());
+                errorType = 'FIELD_VALIDATION';
+            }
+
+            throw new GraphQLError(errorMessage, {
+                extensions: {
+                    errorType
+                }
+            });
+        }
+
     }
 }

@@ -25,7 +25,8 @@ export class CreateRegistrationService {
     private validateFields(fields: CreateRegistrationServiceRequest) {
         const fieldsSchema = z.object({
             userId: z.string(),
-            rideId: z.string()
+            rideId: z.string(),
+            page: z.coerce.number().min(1).default(1)
         })
 
         const data = fieldsSchema.parse(fields);
@@ -49,8 +50,8 @@ export class CreateRegistrationService {
         )
     }
 
-    private async checkIfUserIsAlreadyRegisteredToThisRide(userId: string, rideId: string) {
-        const userRegistrations = await this.registrationsRepository.fetchAllOfUsersRegistrations(userId);
+    private async checkIfUserIsAlreadyRegisteredToThisRide(userId: string, rideId: string, page: number) {
+        const userRegistrations = await this.registrationsRepository.fetchRidesUserRegisteredTo(userId, page);
 
         const isRegisteredToThisRide = userRegistrations.find(registration => {
             return registration.ride_id === rideId;
@@ -82,7 +83,7 @@ export class CreateRegistrationService {
             throw new InvalidDatesError('registration period is over or did not start yet');
         }
 
-        const isUserRegisteredToThisRide = await this.checkIfUserIsAlreadyRegisteredToThisRide(data.userId, data.rideId);
+        const isUserRegisteredToThisRide = await this.checkIfUserIsAlreadyRegisteredToThisRide(data.userId, data.rideId, data.page);
         if (isUserRegisteredToThisRide) throw new AlreadyRegisteredError();
 
         const isUserTheRideCreator = await this.checkIfUserIsOwnRide(rideExists, data.userId);

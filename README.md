@@ -15,7 +15,7 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 - [x] Listar os pedais criados pelo usuário
 
 ## Requisitos Não Funcionais
-- [ ] Todas as consultas devem exigir o usuário autenticado com um JWT
+- [x] Todas as consultas devem exigir o usuário autenticado com um JWT
 - [x] Não permitir cadastro no pedal depois da data de encerramento de inscrição (**end_date_registration**)
 - [x] Não permitir cadastro no pedal antes da data de abertura de inscrição (**start_date_registration**)
 - [x] Início de registro da inscrição deve ser menor (anterior) à sua data de fim
@@ -24,6 +24,3 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 ## Regras de Negócio
 - [x] Emails dos usuários devem ser únicos
 - [x] Telefone dos usuários devem ser opcionais, porém únicos
-
-## Backlog
-- [ ] Test for fields validation (?)

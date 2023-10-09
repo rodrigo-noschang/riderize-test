@@ -6,6 +6,7 @@ import { RideCreatorCanNotRegisterError } from "../../errors/ride-creator-can-no
 import { CreateRegistrationService } from "./create-registration";
 import { InMemoryRidesRepository } from "../../repositories/in-memory/in-memory-rides-repository";
 import { InMemoryRegistrationRepository } from "../../repositories/in-memory/in-memory-registration-repository";
+import { Registration } from "@prisma/client";
 
 let inMemoryRegistrationRepository: InMemoryRegistrationRepository;
 let inMemoryRidesRepository: InMemoryRidesRepository;
@@ -60,12 +61,15 @@ describe('Create Registration Use Case', () => {
         const inRegistrationPeriodDate = new Date('10/05/2023');
         vi.setSystemTime(inRegistrationPeriodDate);
 
-        const { registration } = await sut.execute({
+        const response = await sut.execute({
             rideId: 'ride-01',
             userId: 'user-02'
         });
 
-        expect(registration.registration_id).toEqual(expect.any(String));
+        const registration = response.registration as Registration;
+
+        expect(registration.user_id).toEqual(expect.any(String));
+        expect(registration.ride_id).toEqual(expect.any(String));
     })
 
     it('should not be able to register to a ride when not in Registration Period', async () => {
@@ -84,24 +88,30 @@ describe('Create Registration Use Case', () => {
         const registrationEndDate = new Date('10/07/2023');
         vi.setSystemTime(registrationEndDate);
 
-        const { registration } = await sut.execute({
+        const response = await sut.execute({
             rideId: 'ride-01',
             userId: 'user-02'
         });
 
-        expect(registration.registration_id).toEqual(expect.any(String));
+        const registration = response.registration as Registration;
+
+        expect(registration.user_id).toEqual(expect.any(String));
+        expect(registration.ride_id).toEqual(expect.any(String));
     })
 
     it('should be able to register to a ride on registration start date', async () => {
         const registrationStartDate = new Date('10/03/2023');
         vi.setSystemTime(registrationStartDate);
 
-        const { registration } = await sut.execute({
+        const response = await sut.execute({
             rideId: 'ride-01',
             userId: 'user-02'
         });
 
-        expect(registration.registration_id).toEqual(expect.any(String));
+        const registration = response.registration as Registration;
+
+        expect(registration.user_id).toEqual(expect.any(String));
+        expect(registration.ride_id).toEqual(expect.any(String));
     })
 
     it('should not be able to register to a ride created by himself', async () => {

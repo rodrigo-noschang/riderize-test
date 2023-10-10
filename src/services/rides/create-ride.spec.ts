@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import dayjs from "dayjs";
 
 import { CreateRideService } from "./create-ride";
@@ -13,6 +13,14 @@ describe('Create Ride Use Case', () => {
     beforeEach(() => {
         inMemoryRidesRepository = new InMemoryRidesRepository();
         sut = new CreateRideService(inMemoryRidesRepository);
+
+        vi.useFakeTimers();
+
+        vi.setSystemTime(new Date('09/20/2023'))
+    })
+
+    afterEach(() => {
+        vi.useRealTimers();
     })
 
     it('should be able to create new Ride', async () => {

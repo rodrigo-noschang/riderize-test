@@ -66,12 +66,12 @@ export class CreateRideService {
             start_date
         } = newRideData;
 
-        const isStartBeforeAnd = this.checkIfEndDayRegistrationIsAfterStartDayRegistration(
+        const isStartBeforeRnd = this.checkIfEndDayRegistrationIsAfterStartDayRegistration(
             start_date_registration,
             end_date_registration
         );
 
-        if (!isStartBeforeAnd) throw new InvalidDatesError('start date must be earlier than end date');
+        if (!isStartBeforeRnd) throw new InvalidDatesError('start date must be earlier than end date');
 
         const isRideDayAfterToday = this.checkIfRideStartDayIsAfterCreationDay(start_date);
 

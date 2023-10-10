@@ -1,4 +1,7 @@
-# Teste técnico Riderize:
+![](https://media.licdn.com/dms/image/D4D16AQEgA9_huzlrRg/profile-displaybackgroundimage-shrink_200_800/0/1675721011380?e=2147483647&v=beta&t=6JxqWon8Mkd8SbjZ7fJNxRrS-kS4KEpQyQFeg_fDWDs)
+
+# Teste técnico Riderize  - Rodrigo Noschang
+
 O objetivo desse desafio é criar uma API que irá possibilitar a criação de pedais pelos usuários, além disso outros usuários poderão visualizar esses pedais e se inscrever neles para que no dia marcado aqueles que se inscreveram possam pedalar em grupo.
 
 Nesse documento:

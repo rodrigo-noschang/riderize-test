@@ -19,8 +19,8 @@ Nesse documento:
 - [x] Listar os pedais que o usuário participou (se inscreveu)
 - [x] Listar os pedais criados pelo usuário
 
-- [ ] Deletar Pedal
-- [ ] Cancelar inscrição em um pedal
+- [x] Deletar Pedal
+- [x] Cancelar inscrição em um pedal
 ## Requisitos Não Funcionais
 - [x] Todas as consultas devem exigir o usuário autenticado com um JWT
 - [x] Usuário deve ter (APENAS) a senha encriptografada salva no banco
@@ -34,7 +34,7 @@ Nesse documento:
 - [x] Data do evento deve ser posterior à data final de inscrição (e consequentemente posterior à data de início de inscrição também)
 - [x] Usuário não pode se inscrever para o mesmo pedal duas vezes
 - [x] Usuário não pode se inscrever no pedal criado por ele mesmo
-- [ ] Não permitir inscrição de novos usuários caso o limite de participantes do Pedal seja atingido
+- [x] Não permitir inscrição de novos usuários caso o limite de participantes do Pedal seja atingido
 
 
 # Tecnologias Usadas

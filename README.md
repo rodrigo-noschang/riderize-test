@@ -4,7 +4,7 @@ O objetivo desse desafio é criar uma API que irá possibilitar a criação de p
 Nesse documento:
 - [Estrutura Geral da API](#estrutura-geral)
 - [Tecnologias Usadas](#tecnologias-usadas)
-
+- [Rodando a API localmente](#rodando-localmente)
 
 # Estrutura Geral
 ## Requisitos Funcionais
@@ -65,3 +65,56 @@ Usado para rodar localmente:
 - **CI**: A implementação do CI foi feita utilizando o **Github Actions** sempre que houver um push ou pull request para a main e, nesse processo, antes da integração do novo código, executa-se e espera o sucesso de todos os testes unitários;
 
 - **CD**: A parte de deploy/delivery contínuo foi feita através da própria ferramenta do **Heroku** e é acionada sempre que houver mudança de conteúdo na **main**.
+
+# Rodando Localmente:
+Depois de clonar o repositório enviado no email exigido na avaliação, o primeiro passo é instalar as dependências:
+
+```sh
+    npm i
+```
+
+Como dito [nesta seção](#tecnologias-usadas), essa aplicação faz uso do docker para rodar o banco de persistência (PostgreSQL) e o banco de cache (Redis), portanto, é necessário gerar as imagens no docker:
+
+```sh
+    docker-compose up
+```
+
+Para que os bancos se conectem corretamente, o arquivo `.env` deve estar com os seguintes valores:
+
+```
+    DATABASE_URL="postgresql://docker:docker@localhost:5432/riderize-ride?schema=public"
+    JWT_SECRET="riderize-ride-secret"
+    REDIS_TLS_URL="0.0.0.0"
+    PORT=4000
+```
+
+**IMPORTANTE**: No arquivo de configuação dos bancos (`~/src/db/redis.ts`), temos duas criações diferentes de instâncias do Redis, uma para rodar Localmente, outra para Deploy, conforme indicam os comentários. Para rodar localmente, é necessário comentar a criação do Deploy e descomentar a do Local:
+
+```ts
+    import Redis from 'ioredis';
+
+    import { env } from '../env';
+
+    // Deploy
+    // export const redis = new Redis(env.REDIS_TLS_URL, {
+    //     tls: {
+    //         rejectUnauthorized: false
+    //     }
+    // });
+
+
+    // Local
+    export const redis = new Redis(6379, "0.0.0.0");
+```
+
+Com os bancos devidamente conectados, é necessário ainda rodar as migrations para atualizar o Postgres:
+
+```sh
+    npx prisma migrate deploy
+```
+
+Depois disso, basta rodar a aplicação (comando a seguir) e começar a fazer as Queries com o **ApolloServer**
+
+```sh
+    npm run dev
+```

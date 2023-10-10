@@ -43,28 +43,28 @@ Nesse documento:
 # Tecnologias Usadas
 Abaixo todas as tecnologias empregadas no projeto separadas por suas respectivas áreas de utilidade.
 
-## API
+### API
 - **Node**;
 - **Typescript**;
 - **GraphQL**;
 - **ApolloServer**;
 - **TypeGraphQL**;
 
-## Persistência de Dados
+### Persistência de Dados
 - **PostgreSQL**: banco principal
 - **Prisma**: ORM para acesso e modelagem do banco;
 - **Redis**: cache das consultas de pedais;
 - **ioredis**: Client para manipular o redis;
 
-## Docker
+### Docker
 Usado para rodar localmente:
 - **PostgreSQL**: banco principal
 - **Redis**: banco de cache
 
-## Hospedagem
+### Hospedagem
 - **Heroku**: Hospeda toda a API e fornece os serviços dos bancos Postgresql e Redis.
 
-## CI/CD
+### CI/CD
 - **CI**: A implementação do CI foi feita utilizando o **Github Actions** sempre que houver um push ou pull request para a main e, nesse processo, antes da integração do novo código, executa-se e espera o sucesso de todos os testes unitários;
 
 - **CD**: A parte de deploy/delivery contínuo foi feita através da própria ferramenta do **Heroku** e é acionada sempre que houver mudança de conteúdo na **main**.

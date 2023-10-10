@@ -8,6 +8,7 @@ import { RegistrationRepository } from "../../repositories/registrations-reposit
 import { InvalidDatesError } from "../../errors/invalid-dates";
 import { InstanceNotFoundError } from "../../errors/instance-not-found";
 import { AlreadyRegisteredError } from "../../errors/already-registered";
+import { ReachedParticipantsLimitError } from "../../errors/participants-limit-reached";
 import { RideCreatorCanNotRegisterError } from "../../errors/ride-creator-can-not-register";
 
 interface CreateRegistrationServiceRequest {
@@ -33,8 +34,10 @@ export class CreateRegistrationService {
         return data;
     }
 
-    private checkIfRideExists(rideId: string) {
-        const ride = this.ridesRepository.fetchRideById(rideId);
+    private async checkIfRideExists(rideId: string) {
+        const ride = await this.ridesRepository.fetchRideById(rideId);
+
+        if (!ride) throw new InstanceNotFoundError('ride');
 
         return ride;
     }
@@ -44,10 +47,14 @@ export class CreateRegistrationService {
         const endDate = dayjs(registrationEnd);
         const today = dayjs(new Date());
 
-        return (
+        const isRegistrationAllowed = (
             (today.isAfter(startDate) || today.isSame(startDate)) &&
             (today.isBefore(endDate) || today.isSame(endDate))
         )
+
+        if (!isRegistrationAllowed) {
+            throw new InvalidDatesError('registration period is over or did not start yet');
+        }
     }
 
     private async checkIfUserIsAlreadyRegisteredToThisRide(userId: string, rideId: string, page: number) {
@@ -57,13 +64,23 @@ export class CreateRegistrationService {
             return registration.ride_id === rideId;
         })
 
-        return isRegisteredToThisRide;
+        if (isRegisteredToThisRide) throw new AlreadyRegisteredError();
     }
 
     private async checkIfUserIsOwnRide(ride: Ride, userId: string) {
-        const rideCreatorId = ride.creator_id;
+        const isUserTheRideCreator = ride.creator_id === userId;
 
-        return rideCreatorId === userId
+        if (isUserTheRideCreator) throw new RideCreatorCanNotRegisterError();
+    }
+
+    private async checkParticipantsLimit(ride: Ride) {
+        if (!ride.participants_limit) return;
+
+        const currentParticipants = await this.registrationsRepository.fetchRideParticipantsCount(ride.ride_id);
+
+        if (currentParticipants >= ride.participants_limit) {
+            throw new ReachedParticipantsLimitError();
+        }
     }
 
     /* ========================== main routine ============================ */
@@ -72,22 +89,16 @@ export class CreateRegistrationService {
 
         const rideExists = await this.checkIfRideExists(data.rideId);
 
-        if (!rideExists) throw new InstanceNotFoundError('ride');
-
-        const isRegistrationAllowed = this.checkIfCreationDateIsWithinRegistrationRange(
+        this.checkIfCreationDateIsWithinRegistrationRange(
             rideExists.start_date_registration,
             rideExists.end_date_registration
         )
 
-        if (!isRegistrationAllowed) {
-            throw new InvalidDatesError('registration period is over or did not start yet');
-        }
+        await this.checkIfUserIsAlreadyRegisteredToThisRide(data.userId, data.rideId, data.page);
 
-        const isUserRegisteredToThisRide = await this.checkIfUserIsAlreadyRegisteredToThisRide(data.userId, data.rideId, data.page);
-        if (isUserRegisteredToThisRide) throw new AlreadyRegisteredError();
+        await this.checkIfUserIsOwnRide(rideExists, data.userId);
 
-        const isUserTheRideCreator = await this.checkIfUserIsOwnRide(rideExists, data.userId);
-        if (isUserTheRideCreator) throw new RideCreatorCanNotRegisterError();
+        await this.checkParticipantsLimit(rideExists);
 
         const registration = await this.registrationsRepository.create({
             user_id: data.userId,

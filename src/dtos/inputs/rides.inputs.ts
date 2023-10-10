@@ -44,3 +44,9 @@ export class FetchRidesInput {
     @Field({ nullable: true, defaultValue: 1 })
     page?: number
 }
+
+@InputType()
+export class DeleteRideInput {
+    @Field()
+    rideId: string
+}

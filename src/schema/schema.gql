@@ -21,6 +21,22 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
+input DeleteRegistrationInput {
+  rideId: String!
+}
+
+type DeleteRegistrationReturn {
+  registration_id: String!
+}
+
+input DeleteRideInput {
+  rideId: String!
+}
+
+type DeleteRideReturn {
+  rideId: String!
+}
+
 input FetchRidesCreatedByUserInput {
   page: Float = 1
   userId: String!
@@ -42,8 +58,10 @@ input FetchUsersSubscribedToRideInput {
 
 type Mutation {
   authenticateUser(data: AuthenticateUserInput!): AuthenticateUser!
-  createRegistration(data: CreateRegistrationInput!): RegistrationModel!
+  deleteRegistration(data: DeleteRegistrationInput!): DeleteRegistrationReturn!
+  deleteRide(data: DeleteRideInput!): DeleteRideReturn!
   registerRide(data: RegisterRideInput!): RideModel!
+  registerToARide(data: CreateRegistrationInput!): RegistrationModel!
   registerUser(data: RegisterUserInput!): UserModel!
 }
 

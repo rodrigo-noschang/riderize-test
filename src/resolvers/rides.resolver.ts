@@ -2,17 +2,20 @@ import { ZodError } from "zod";
 import { GraphQLError } from "graphql";
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
-import { RideModel } from "../dtos/models/rides.model";
-import { FetchRidesCreatedByUserInput, FetchRidesInput, RegisterRideInput } from "../dtos/inputs/rides.inputs";
+import { redis } from "../db/redis";
+import { DeleteRideReturn, RideModel } from "../dtos/models/rides.model";
+import { DeleteRideInput, FetchRidesCreatedByUserInput, FetchRidesInput, RegisterRideInput } from "../dtos/inputs/rides.inputs";
 
 import { FetchRidesService } from "../services/rides/fetch-rides";
 import { CreateRideService } from "../services/rides/create-ride";
+import { DeleteRideService } from "../services/rides/delete-ride";
 import { PrismaRidesRepository } from "../repositories/prisma/prisma-rides-repository";
 import { FetchRidesCreatedByUserService } from "../services/rides/fetch-rides-created-by-user";
 
-import { redis } from "../db/redis";
 import { AuthContext } from "../utils/token-related";
+import { CreatorOnlyError } from "../errors/creator-only";
 import { InvalidDatesError } from "../errors/invalid-dates";
+import { InstanceNotFoundError } from "../errors/instance-not-found";
 
 async function readFromCache() {
     const cachedData = await redis.get('rides');
@@ -75,7 +78,6 @@ export class RidesResolver {
     @Query(returns => [RideModel])
     async fetchRidesCreatedByUser(
         @Arg('data') data: FetchRidesCreatedByUserInput,
-        @Ctx() ctx: AuthContext
     ) {
         try {
             const { page, userId } = data;
@@ -141,6 +143,49 @@ export class RidesResolver {
                 }
             });
         }
+    }
 
+    @Authorized()
+    @Mutation(returns => DeleteRideReturn)
+    async deleteRide(
+        @Ctx() ctx: AuthContext,
+        @Arg('data') data: DeleteRideInput
+    ) {
+        try {
+            const { userId } = ctx;
+            const { rideId } = data;
+
+            const prismaRepository = new PrismaRidesRepository();
+            const service = new DeleteRideService(prismaRepository);
+
+            const deletedRideId = await service.execute({
+                rideId,
+                userId
+            })
+
+            return deletedRideId;
+        } catch (error) {
+            let errorMessage = '';
+            let errorType = '';
+
+            if (error instanceof ZodError) {
+                errorMessage = JSON.stringify(error.format());
+                errorType = 'FIELD_VALIDATION';
+            }
+
+            if (
+                error instanceof InstanceNotFoundError ||
+                error instanceof CreatorOnlyError
+            ) {
+                errorMessage = error.message;
+                errorType = error.type;
+            }
+
+            throw new GraphQLError(errorMessage, {
+                extensions: {
+                    errorType
+                }
+            });
+        }
     }
 }

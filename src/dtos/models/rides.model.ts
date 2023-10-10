@@ -35,3 +35,9 @@ export class RideModel {
     @Field()
     creator_id: string;
 }
+
+@ObjectType()
+export class DeleteRideReturn {
+    @Field()
+    rideId: string
+}

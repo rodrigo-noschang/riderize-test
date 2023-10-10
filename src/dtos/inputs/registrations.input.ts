@@ -22,5 +22,10 @@ export class FetchUsersSubscribedToRideInput {
 
     @Field({ nullable: true, defaultValue: 1 })
     page?: number
+}
 
+@InputType()
+export class DeleteRegistrationInput {
+    @Field()
+    rideId: string
 }

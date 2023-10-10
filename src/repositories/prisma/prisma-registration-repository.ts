@@ -24,6 +24,14 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
         return registration;
     }
 
+    async deleteRegistration(registrationId: string) {
+        await prisma.registration.delete({
+            where: {
+                registration_id: registrationId
+            }
+        });
+    }
+
     async fetchUsersRegisteredToARide(rideId: string, page: number) {
         const take = CONTENT_PER_PAGE;
         const skip = CONTENT_PER_PAGE * (page - 1);
@@ -58,5 +66,26 @@ export class PrismaRegistrationRepository implements RegistrationRepository {
         })
 
         return response.map(res => res.ride);
+    }
+
+    async fetchSpecificRegistration(userId: string, rideId: string) {
+        const registration = await prisma.registration.findFirst({
+            where: {
+                user_id: userId,
+                ride_id: rideId,
+            }
+        })
+
+        return registration;
+    }
+
+    async fetchRideParticipantsCount(rideId: string) {
+        const participantsAmount = await prisma.registration.count({
+            where: {
+                ride_id: rideId
+            }
+        })
+
+        return participantsAmount;
     }
 }

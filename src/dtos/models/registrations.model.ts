@@ -17,3 +17,9 @@ export class RegistrationModel {
     @Field()
     user: UserModel;
 }
+
+@ObjectType()
+export class DeleteRegistrationReturn {
+    @Field()
+    registration_id: string
+}

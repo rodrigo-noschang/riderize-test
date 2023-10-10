@@ -14,6 +14,14 @@ export class PrismaRidesRepository implements RidesRepository {
         return newRide;
     }
 
+    async deleteRide(rideId: string) {
+        await prisma.ride.delete({
+            where: {
+                ride_id: rideId
+            }
+        });
+    }
+
     async fetchRideById(rideId: string) {
         const foundRide = await prisma.ride.findUnique({
             where: {

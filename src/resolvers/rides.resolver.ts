@@ -26,7 +26,7 @@ async function readFromCache() {
 async function writeOnCache(data: any) {
     const stringifiedData = JSON.stringify(data);
 
-    await redis.set('rides', stringifiedData, 'EX', 20);
+    await redis.set('rides', stringifiedData, 'EX', 600);
 }
 
 
